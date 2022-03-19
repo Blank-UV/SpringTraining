@@ -1,0 +1,24 @@
+package com.epam.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.epam.model.Company;
+import com.epam.repository.CompanyRepository;
+import com.epam.service.CompanyService;
+
+@Service
+public class CompanyServiceImpl implements CompanyService{
+
+	@Autowired
+	CompanyRepository companyRepo;
+	
+	@Override
+	public List<Company> getAllCompany()
+	{
+		companyRepo.findAll();
+	}
+	 
+}

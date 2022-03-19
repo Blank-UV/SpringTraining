@@ -1,0 +1,7 @@
+package com.epam.repository;
+
+import com.epam.model.Company;
+
+public class CompanyRepository extends JpaRepository<Company,String>{
+
+}

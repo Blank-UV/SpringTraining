@@ -1,0 +1,30 @@
+package com.epam.service;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.stereotype.Component;
+
+import com.epam.model.Employee;
+
+@Component
+public class EmployeeService {
+
+	public Set<Employee> getAllEmployee()
+	{
+		Set<Employee> employeeSet = new HashSet<>();
+		Employee employee1 = new Employee();
+		employee1.setFirstname("yuvaraj");
+		employee1.setSecondName("Pradhan");
+		employee1.setCompany("Epam");
+		employee1.setAge(22);
+		Employee employee2 = new Employee();
+		employee2.setFirstname("suraj");
+		employee2.setSecondName("pratap");
+		employee2.setCompany("Google");
+		employee2.setAge(23);
+		employeeSet.add(employee1);
+		employeeSet.add(employee2);
+		return employeeSet;
+	}
+}

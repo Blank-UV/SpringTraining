@@ -1,0 +1,16 @@
+server:
+  port : 8081
+spring:
+  datasource:
+    url : jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/employee
+    username : ${MYSQL_USER:root}
+    password : ${MYSQL_PASSWORD:Yuvaraj@1998}
+  jpa:
+    hibernate:
+      ddl-auto : update
+  mvc:
+    pathmatch:
+      matching-strategy : ant-path-matcher
+  jackson:
+    serialization:
+      fail-on-empty-beans : false

@@ -1,0 +1,28 @@
+package com.epam.controller;
+
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.epam.model.Company;
+
+@RestController
+public class CompanyEmployeeController {
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	String url = "http//localhost:8081/employees";
+	
+	@GetMapping
+	public String getAllEmployee()
+	{
+		return restTempalte.exchange("");
+	}
+	
+
+}

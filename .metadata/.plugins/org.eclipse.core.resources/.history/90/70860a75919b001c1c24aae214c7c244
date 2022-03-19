@@ -1,0 +1,10 @@
+package com.epam.service.impl;
+
+import java.util.Set;
+
+import com.epam.model.Company;
+
+public interface CompanyService {
+
+	public Set<Company> getAllCompany();
+}

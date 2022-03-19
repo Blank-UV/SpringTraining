@@ -1,0 +1,13 @@
+package com.epam.service.impl;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
+import com.epam.model.Company;
+
+public class CompanyService {
+
+	public Set<Company> getAllCompany();
+}

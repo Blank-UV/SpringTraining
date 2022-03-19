@@ -1,0 +1,9 @@
+package com.epam.model;
+
+public class Employee {
+
+	String firstname;
+	String secondName;
+	String company;
+	int age;
+}

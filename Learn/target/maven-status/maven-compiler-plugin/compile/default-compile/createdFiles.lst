@@ -1,0 +1,13 @@
+com\consumer\service\MessageReceiverAsync.class
+com\epam\config\AppConfig.class
+com\epam\model\Product.class
+com\epam\service\MessageSender.class
+com\consumer\config\ConsumerAppConfig.class
+com\epam\app\MessageProducerApp.class
+MessageProducerClass.class
+com\epam\app\MessageConsumerApp.class
+com\epam\config\MessagingConfiguration.class
+com\consumer\config\MessagingConfiguration.class
+MessageConsumerClass.class
+com\epam\service\MessageReceiver.class
+com\consumer\app\MessageConsumerAsyncApp.class

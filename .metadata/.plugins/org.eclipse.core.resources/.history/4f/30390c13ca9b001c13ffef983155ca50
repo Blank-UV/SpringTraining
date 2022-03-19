@@ -1,0 +1,10 @@
+package com.epam.service;
+
+import java.util.Set;
+
+import com.epam.model.Employee;
+
+public interface EmployeeService {
+
+	public Set<Employee> getAllEmployee();
+}
