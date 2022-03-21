@@ -17,19 +17,19 @@ public class CompanyController {
 	@Autowired
 	CompanyService companyService;
 	
-	@GetMapping("/companyList")
+	@GetMapping("/companylist")
 	public List<Company> getAllCompany()
 	{
 		return companyService.getAllCompany();
 	}
 
 	@GetMapping("/{name}")
-	public Company getByBookId(@PathVariable String name){
+	public Company getByCompanyId(@PathVariable String name){
 		return companyService.getCompanyByName(name);
 	}
 
 	@PostMapping("/addCompany")
-	public ResponseEntity<String> addEmployee(@RequestBody CompanyDto companyDto){
+	public ResponseEntity<String> addCompany(@RequestBody CompanyDto companyDto){
 
 		String status = "Company added";
 		HttpStatus httpstatus = HttpStatus.CREATED;
@@ -38,7 +38,7 @@ public class CompanyController {
 	}
 
 	@DeleteMapping("/{name}")
-	public ResponseEntity<String> removeBook(@PathVariable String name) {
+	public ResponseEntity<String> removeCompany(@PathVariable String name) {
 
 		String status = "Company deleted";
 		HttpStatus httpstatus = HttpStatus.NO_CONTENT;
