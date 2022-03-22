@@ -1,6 +1,9 @@
 package com.epam.Controller;
 
 import com.epam.dto.CompanyDto;
+import com.epam.exception.DuplicateDataException;
+import com.epam.exception.NotFoundException;
+import com.epam.exception.ParameterNotCorrectException;
 import com.epam.model.Company;
 import com.epam.service.CompanyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -19,7 +23,6 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
@@ -97,6 +100,26 @@ public class CompanyControllerTest {
     }
 
     @Test
+    void getByCompanyIdTest_ParameterNotCorrectException() throws Exception {
+        when(companyService.getCompanyByName(NAME)).thenThrow(new ParameterNotCorrectException("ParameterNotCorrectException"));
+        mockMvc.perform(get(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_ACCEPTABLE.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("ParameterNotCorrectException"));
+        verify(companyService, times(1)).getCompanyByName(NAME);
+
+    }
+
+    @Test
+    void getByCompanyIdTest_NotFoundException() throws Exception {
+        when(companyService.getCompanyByName(NAME)).thenThrow(new NotFoundException("NotFoundException"));
+        mockMvc.perform(get(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("NotFoundException"));
+        verify(companyService, times(1)).getCompanyByName(NAME);
+
+    }
+
+    @Test
     void addCompanyTest() throws Exception {
         when(companyService.addCompany(any())).thenReturn(true);
 
@@ -110,11 +133,33 @@ public class CompanyControllerTest {
     }
 
     @Test
+    void addCompanyTest_DuplicateDataException() throws Exception {
+        when(companyService.addCompany(any())).thenThrow(new DuplicateDataException("DuplicateDataException"));
+        mockMvc.perform(post(URL + "/addCompany").header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ=")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapToJson(companyDto)))
+                .andExpect(MockMvcResultMatchers.status().isNotAcceptable())
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("DuplicateDataException"));
+        verify(companyService, times(1)).addCompany(any());
+
+    }
+
+    @Test
     void removeCompanyTest() throws Exception {
         when(companyService.removeCompany(NAME)).thenReturn(true);
         mockMvc.perform(delete(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
+        verify(companyService, times(1)).removeCompany(NAME);
+
+    }
+
+    @Test
+    void removeCompanyTest_NotFoundException() throws Exception {
+        when(companyService.removeCompany(NAME)).thenThrow(new NotFoundException("NotFoundException"));
+        mockMvc.perform(delete(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("NotFoundException"));
         verify(companyService, times(1)).removeCompany(NAME);
 
     }

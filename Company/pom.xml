@@ -57,6 +57,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -72,7 +73,7 @@
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-spring-boot2</artifactId>
-			<version>1.7.0</version>
+			<version>1.7.1</version>
 		</dependency>
 	</dependencies>
 	<build>

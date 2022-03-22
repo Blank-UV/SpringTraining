@@ -1,6 +1,9 @@
 package com.epam.controller;
 
 import com.epam.dto.EmployeeDto;
+import com.epam.exception.DuplicateDataException;
+import com.epam.exception.NotFoundException;
+import com.epam.exception.ParameterNotCorrectException;
 import com.epam.model.Employee;
 import com.epam.service.EmployeeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -93,6 +97,25 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    void getByCompanyIdTest_ParameterNotCorrectException() throws Exception {
+        when(employeeService.getEmployeeByName(NAME)).thenThrow(new ParameterNotCorrectException("ParameterNotCorrectException"));
+        mockMvc.perform(get(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_ACCEPTABLE.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("ParameterNotCorrectException"));
+        verify(employeeService, times(1)).getEmployeeByName(NAME);
+
+    }
+
+    @Test
+    void getByCompanyIdTest_NotFoundException() throws Exception {
+        when(employeeService.getEmployeeByName(NAME)).thenThrow(new NotFoundException("NotFoundException"));
+        mockMvc.perform(get(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("NotFoundException"));
+        verify(employeeService, times(1)).getEmployeeByName(NAME);
+
+    }
+    @Test
     void addEmployeeTest() throws Exception {
         when(employeeService.addEmployee(any())).thenReturn(true);
 
@@ -106,11 +129,32 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    void removeBookTest() throws Exception {
+    void addCompanyTest_DuplicateDataException() throws Exception {
+        when(employeeService.addEmployee(any())).thenThrow(new DuplicateDataException("DuplicateDataException"));
+        mockMvc.perform(post(URL + "/addEmployee").header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ=")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(mapToJson(employeeDto)))
+                .andExpect(MockMvcResultMatchers.status().isNotAcceptable())
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("DuplicateDataException"));
+        verify(employeeService, times(1)).addEmployee(any());
+
+    }
+    @Test
+    void removeEmployeeTest() throws Exception {
         when(employeeService.removeEmployee(NAME)).thenReturn(true);
         mockMvc.perform(delete(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
+        verify(employeeService, times(1)).removeEmployee(NAME);
+
+    }
+
+    @Test
+    void removeCompanyTest_NotFoundException() throws Exception {
+        when(employeeService.removeEmployee(NAME)).thenThrow(new NotFoundException("NotFoundException"));
+        mockMvc.perform(delete(URL + "/" + NAME).header("Authorization", "Basic YWRtaW46cGFzc3dvcmQ="))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(MockMvcResultMatchers.jsonPath("errormessage").value("NotFoundException"));
         verify(employeeService, times(1)).removeEmployee(NAME);
 
     }

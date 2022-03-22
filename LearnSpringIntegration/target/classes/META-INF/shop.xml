@@ -68,16 +68,17 @@
 	<!-- drink order items are aggregated in a call to the waiter -->
 	<int:channel id="processedItems" />
 
-	<int:aggregator input-channel="processedItems" method="prepareDelivery" ref="orderCompleter"
+<!--	<int:aggregator input-channel="processedItems" method="prepareDelivery" ref="orderCompleter"
 		output-channel="deliveries">
 	</int:aggregator>
 	<beans:bean id="orderCompleter" class="com.learn.service.OrderCompleter" />
+-->
 
 	<int-stream:stdout-channel-adapter
-		id="deliveries" />
+		id="processedItems" />
 
 
-	<int:poller id="poller" default="true" fixed-delay="60000" />
+	<int:poller id="poller" default="true" fixed-delay="100000" />
 
 
 </beans:beans>

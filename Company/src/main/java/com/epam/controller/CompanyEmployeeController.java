@@ -45,21 +45,23 @@ public class CompanyEmployeeController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CompanyService Down");
 	}
 
+	@CircuitBreaker(name=EMPLOYEE_SERVICE, fallbackMethod = "fallbackMethod")
 	@GetMapping("/employee/{firstname}")
 	public ResponseEntity<String> getEmployeeByName(@PathVariable String firstname){
 		HttpEntity<String> entity = new HttpEntity<String>(createHeaders("admin", "password"));
 		return restTemplate.exchange(url+"/"+firstname, HttpMethod.GET, entity, String.class);
 	}
 
+	@CircuitBreaker(name=EMPLOYEE_SERVICE, fallbackMethod = "fallbackMethod")
 	@PostMapping("/employee/addEmployee")
 	public ResponseEntity<String> addEmployee(@RequestBody EmployeeDto employeeDto){
 		HttpEntity<EmployeeDto> entity = new HttpEntity<>(employeeDto,createHeaders("admin", "password"));
 		return restTemplate.exchange(url+"/addEmployee", HttpMethod.POST, entity, String.class);
 	}
 
+	@CircuitBreaker(name=EMPLOYEE_SERVICE, fallbackMethod = "fallbackMethod")
 	@DeleteMapping("/employee/{firstname}")
 	public ResponseEntity<String> removeBook(@PathVariable String firstname) {
-
 		HttpEntity<String> entity = new HttpEntity<String>(createHeaders("admin", "password"));
 		return restTemplate.exchange(url+"/"+firstname, HttpMethod.DELETE, entity, String.class);
 	}
