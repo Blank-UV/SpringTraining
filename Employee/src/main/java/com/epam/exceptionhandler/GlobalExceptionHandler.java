@@ -6,11 +6,14 @@ import com.epam.exception.NotFoundException;
 import com.epam.exception.ParameterNotCorrectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Date;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -32,6 +35,21 @@ public class GlobalExceptionHandler {
     public ErrorResponse duplicateDataException(NotFoundException ex) {
         errorResponse.setErrormessage(ex.getMessage());
         errorResponse.setStatus(HttpStatus.NOT_FOUND.name());
+        errorResponse.setTimestamp(new Date().toString());
+        return errorResponse;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorResponse methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        List<ObjectError> errorList= ex.getAllErrors();
+        String errorString = "";
+        for(ObjectError error : errorList){
+            errorString = errorString + error.getDefaultMessage() + ".";
+        }
+
+        errorResponse.setErrormessage(errorString);
+        errorResponse.setStatus(HttpStatus.NOT_ACCEPTABLE.name());
         errorResponse.setTimestamp(new Date().toString());
         return errorResponse;
     }

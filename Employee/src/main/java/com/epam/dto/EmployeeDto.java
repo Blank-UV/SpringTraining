@@ -1,10 +1,18 @@
 package com.epam.dto;
 
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
 public class EmployeeDto {
 
+    @NotBlank(message = "FirstName cannot be empty or null")
     String firstname;
+    @NotBlank(message = "SecondName cannot be empty or null")
     String secondName;
+    @NotBlank(message = "Company Name cannot be empty or null")
     String company;
+    @Positive(message = "Age cannot be negative or zero or null")
     int age;
 
     public EmployeeDto() {

@@ -11,13 +11,17 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
 @Api("Operation on Employees")
+@Validated
 public class EmployeeController {
 
     @Autowired
@@ -31,13 +35,13 @@ public class EmployeeController {
 
     @ApiOperation("Get Employee based on the firstname")
     @GetMapping("/{firstname}")
-    public Employee getByEmployeeId(@PathVariable String firstname) throws ParameterNotCorrectException, NotFoundException {
+    public Employee getByEmployeeId(@PathVariable @NotEmpty String firstname) throws ParameterNotCorrectException, NotFoundException {
         return employeeService.getEmployeeByName(firstname);
     }
 
     @ApiOperation("Add Employees to the Database")
     @PostMapping("/addEmployee")
-    public ResponseEntity<String> addEmployee(@RequestBody EmployeeDto employeeDto) throws DuplicateDataException {
+    public ResponseEntity<String> addEmployee(@RequestBody @Valid EmployeeDto employeeDto) throws DuplicateDataException {
 
         String status = "Employee added";
         HttpStatus httpstatus = HttpStatus.CREATED;
@@ -47,7 +51,7 @@ public class EmployeeController {
 
     @ApiOperation("Delete employee based on firstname")
     @DeleteMapping("/{firstname}")
-    public ResponseEntity<String> removeBook(@PathVariable String firstname) throws NotFoundException {
+    public ResponseEntity<String> removeBook(@PathVariable @NotEmpty String firstname) throws NotFoundException {
 
         String status = "Employee deleted";
         HttpStatus httpstatus = HttpStatus.NO_CONTENT;
